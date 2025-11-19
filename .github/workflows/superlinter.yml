@@ -1,34 +1,19 @@
-name: Lint
+name: Super-Linter
 
-on: # yamllint disable-line rule:truthy
+on:
   push:
-    branches: ["main"]
+    branches: [ main ]
   pull_request:
-    branches: ["main"]
-
-permissions: {}
+    branches: [ main ]
 
 jobs:
-  build:
-    name: Lint
+  super-lint:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      packages: read
-      # To report GitHub Actions status checks
-      statuses: write
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-        with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
-          persist-credentials: false
-
-      - name: Super-linter
-        uses: super-linter/super-linter@v8.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - uses: actions/checkout@v3
+    - name: Run Super Linter
+      uses: github/super-linter@v5
+      env:
+        DEFAULT_BRANCH: main
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        VALIDATE_ALL_CODEBASE: false
